@@ -1,0 +1,37 @@
+FROM cfmeqe/sel_base_fc28
+
+#TODO: figure why user 0 was needed
+USER 0
+
+ENV SELENIUM_VERSION 3.14.0
+ENV FIREFOX_VERSION 60.3.0
+ENV FULL_FF_VERSION ${FIREFOX_VERSION}esr
+ENV GECKODRIVER_VERSION v0.20.1
+
+# bug in FF source code
+ENV SHELL /bin/bash
+
+# xstartup
+ADD ./xstartup.sh /xstartup.sh
+RUN chmod 775 /xstartup.sh && mkdir -p ~/.cache/dconf
+
+# selenium
+# TODO: make better url scheme
+ADD http://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-$SELENIUM_VERSION.jar \
+    /root/selenium-server/selenium-server-standalone.jar
+
+
+# firefox
+RUN yum install -y xz
+ADD https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FULL_FF_VERSION/source/firefox-$FULL_FF_VERSION.source.tar.xz \
+    /root/firefox.tar.xz
+ADD https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz \
+    /root/gecko.tar.gz
+
+RUN tar -C /root/ -xJvf /root/firefox.tar.xz && rm -f /root/firefox.tar.xz
+
+# setup FF env by installing all necessary packages
+RUN pip install six
+RUN dnf install -y mercurial.x86_64 clang llvm llvm-devel
+ADD https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py /root/bootstrap.py
+RUN python /root/bootstrap.py --no-interactive --application-choice=browser_artifact_mode ; rm -f /root/bootstrap.py

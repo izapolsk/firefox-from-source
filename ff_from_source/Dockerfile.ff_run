@@ -1,0 +1,11 @@
+FROM cfmeqe/ff_install
+
+
+# runtime
+EXPOSE 4444
+EXPOSE 5999
+
+# to remove when image is rebuilt
+ADD ./xstartup.sh /xstartup.sh
+
+CMD ["/bin/bash", "/xstartup.sh"]
