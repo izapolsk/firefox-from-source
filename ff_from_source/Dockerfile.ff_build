@@ -1,0 +1,8 @@
+FROM cfmeqe/ff_prepare_to_build
+
+
+RUN /root/firefox-${FIREFOX_VERSION}/mach build
+
+
+RUN yum clean all
+

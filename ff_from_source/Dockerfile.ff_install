@@ -1,0 +1,5 @@
+FROM cfmeqe/ff_build
+
+RUN /root/firefox-${FIREFOX_VERSION}/mach install
+
+RUN tar -C /usr/local/bin/ -xvf /root/gecko.tar.gz && rm -f /root/gecko.tar.gz

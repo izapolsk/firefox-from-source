@@ -1,0 +1,8 @@
+FROM cfmeqe/ff_install
+
+
+# runtime
+EXPOSE 4444
+EXPOSE 5999
+
+CMD ["/bin/bash", "/xstartup.sh"]
