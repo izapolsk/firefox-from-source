@@ -14,7 +14,7 @@ fi
 
 # Start Xvfb and x11vnc
 export DISPLAY=:99
-export PATH="/usr/bin:/root/firefox:/root/chrome-driver:$PATH"
+export PATH="/usr/bin:/usr/local/bin:$PATH"
 export SSLKEYLOGFILE="/root/sslkeyfile.log"
 
 Xvfb $DISPLAY -shmem -screen 0 '1280x1024x16' -ac +extension RANDR &
